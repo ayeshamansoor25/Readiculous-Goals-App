@@ -1,0 +1,29 @@
+{% extends "base.html" %}{% block title %}My TBR{% endblock %}
+{% block content %}
+<h2>My TBR</h2>
+<div class="card">
+ <h3>{{ year }} Reading Goal</h3>
+ {% if target %}<p>{{ done }} of {{ target }} books finished ({{ pct }}%)</p>
+ <div class="bar"><div style="width:{{ pct }}%"></div></div>{% else %}<p>No goal set yet.</p>{% endif %}
+ <form method="post" action="{{ url_for('set_goal') }}" style="margin-top:12px">
+  <input name="target" type="number" min="1" placeholder="Books this year" required>
+  <button>Save goal</button>
+ </form>
+</div>
+<table>
+ <tr><th>Title</th><th>Author</th><th>Genre</th><th>Status</th><th></th></tr>
+ {% for i in items %}
+ <tr>
+  <td>{{ i.title }}</td><td>{{ i.author }}</td><td>{{ i.genre }}</td>
+  <td>
+   <form class="inline" method="post" action="{{ url_for('tbr_status', item_id=i.id) }}">
+    <select name="status" onchange="this.form.submit()">
+     {% for s in statuses %}<option value="{{ s }}" {{ 'selected' if s == i.status }}>{{ s.replace('_',' ') }}</option>{% endfor %}
+    </select>
+   </form>
+  </td>
+  <td><form class="inline" method="post" action="{{ url_for('tbr_remove', item_id=i.id) }}"><button class="danger">Remove</button></form></td>
+ </tr>
+ {% else %}<tr><td colspan="5">Your TBR is empty. Add books from the <a href="{{ url_for('books') }}">catalog</a>.</td></tr>{% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Readiculous Goals{% endblock %}</title>
+<style>
+ body{font-family:system-ui,Arial,sans-serif;margin:0;background:#faf6f1;color:#2b2b2b}
+ nav{background:#5b3a29;padding:12px 24px;display:flex;gap:18px;align-items:center}
+ nav a{color:#fff;text-decoration:none} nav .brand{font-weight:700;font-size:18px;margin-right:auto}
+ main{max-width:960px;margin:24px auto;padding:0 16px}
+ table{width:100%;border-collapse:collapse;background:#fff} th,td{padding:8px 10px;border-bottom:1px solid #e5ddd3;text-align:left}
+ th{background:#efe6da} input,select,textarea{padding:7px;border:1px solid #bbb;border-radius:4px}
+ button,.btn{background:#5b3a29;color:#fff;border:0;padding:7px 12px;border-radius:4px;cursor:pointer;text-decoration:none;font-size:14px}
+ button.danger{background:#a33} form.inline{display:inline}
+ .flash{padding:10px 14px;margin-bottom:12px;border-radius:4px} .success{background:#dff0d8} .error{background:#f8d7da}
+ .card{background:#fff;padding:16px;border-radius:6px;margin-bottom:16px}
+ .bar{background:#e5ddd3;border-radius:6px;height:16px;overflow:hidden} .bar div{background:#6a9955;height:16px}
+ label{display:block;margin:10px 0 4px}
+</style></head>
+<body>
+<nav>
+ <a class="brand" href="/">📚 Readiculous Goals</a>
+ {% if session.user_id %}
+  <a href="{{ url_for('books') }}">Books</a>
+  <a href="{{ url_for('tbr') }}">My TBR</a>
+  {% if session.role == 'admin' %}<a href="{{ url_for('add_book') }}">+ Add Book</a>{% endif %}
+  <span style="color:#d9c7b8">{{ session.username }} ({{ session.role }})</span>
+  <a href="{{ url_for('logout') }}">Logout</a>
+ {% else %}
+  <a href="{{ url_for('login') }}">Login</a><a href="{{ url_for('register') }}">Register</a>
+ {% endif %}
+</nav>
+<main>
+ {% for cat, msg in get_flashed_messages(with_categories=true) %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}
+ {% block content %}{% endblock %}
+</main>
+</body></html>

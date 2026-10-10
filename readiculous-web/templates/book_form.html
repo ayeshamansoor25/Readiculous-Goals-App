@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block title %}{{ 'Edit' if book else 'Add' }} Book{% endblock %}
+{% block content %}
+<div class="card" style="max-width:480px">
+ <h2>{{ 'Edit' if book else 'Add' }} Book</h2>
+ <form method="post">
+  <label>Title</label><input name="title" required style="width:100%" value="{{ book.title if book }}">
+  <label>Author</label><input name="author" required style="width:100%" value="{{ book.author if book }}">
+  <label>Genre</label><input name="genre" required style="width:100%" value="{{ book.genre if book }}">
+  <label>Pages</label><input name="pages" type="number" min="0" value="{{ book.pages if book else 0 }}">
+  <label>Description</label><textarea name="description" rows="4" style="width:100%">{{ book.description if book and book.description }}</textarea>
+  <p><button>Save</button> <a href="{{ url_for('books') }}">Cancel</a></p>
+ </form>
+</div>
+{% endblock %}
